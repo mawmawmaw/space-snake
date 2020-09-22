@@ -74,7 +74,7 @@ video{
     min-height: 100%;
     z-index: -1;
 }
-section#gameStartModal, div#noMobile {
+#gameStartModal, #noMobile {
     font-family: 'Ranchers';
     width: 360px;
     margin-left: -180px;
@@ -92,13 +92,13 @@ section#gameStartModal, div#noMobile {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
-div.lastScore, div.highScore {
+.lastScore, .highScore {
     font-size: 12px;
     margin-bottom: 20px;
     background-color: rgba(140,222,0,0.2);
     padding: 5px;
 }
-div#noMobile{
+#noMobile{
     display: none;
 }
 @media (min-width: 768px){
@@ -110,18 +110,18 @@ div#noMobile{
     }
 }
 @media (orientation: portrait){
-    canvas, section#gameStartModal{
+    canvas, #gameStartModal{
         display: none;
     }
-    div#noMobile{
+    #noMobile{
         display: block;
     }
 }
 @media (max-width:1124px){
-    canvas, section#gameStartModal{
+    canvas, #gameStartModal{
         display: none;
     }
-    div#noMobile{
+    #noMobile{
         display: block;
     }
 }
