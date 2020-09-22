@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Snake</title>
+    <link rel="stylesheet" href="style.css" type="text/css"/>
+</head>
+<body>
+
+    <video autoplay muted loop id="bgvid">
+        <source src="assets/img/bg.mp4" type="video/mp4">
+    </video>
+
+    <section id="header">
+        <section id="logo">Space Snake</section>
+        <section id="level">
+            Select Level
+            <select id="level">
+                <option value="easy" selected>Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+                <option value="impossible">Impossible</option>
+            </select>
+        </section>
+        <section id="start">
+            <input type="button" id="start" value="START">
+        </section>
+    </section>
+    <section id="gameStartModal">
+        <section id="level">
+            Select Level
+            <select id="level-modal">
+                <option value="easy">Easy</option>
+                <option value="medium" selected>Medium</option>
+                <option value="hard">Hard</option>
+                <option value="impossible">Impossible</option>
+            </select>
+        </section>
+        <section id="start">
+            <input type="button" id="start-modal" value="START">
+        </section>
+    </section>
+
+    <canvas id="game-area"></canvas>
+
+    <div id="noMobile">
+        <p>Please play on a desktop computer</p>
+    </div>
+
+    <script type="text/javascript" src="js/classes/food.js"></script>
+    <script type="text/javascript" src="js/classes/snake.js"></script>
+    <script type="text/javascript" src="js/classes/barrier.js"></script>
+    <script type="text/javascript" src="js/game.js"></script>
+
+</body>
+</html>
