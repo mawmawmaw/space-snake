@@ -7,7 +7,7 @@
 }
 @font-face {
     font-family: "Emojis"; 
-    src: url("./assets/fonts/TwitterColorEmoji-SVGinOT.ttf") format("ttf"); 
+    src: url(./assets/fonts/TwitterColorEmoji-SVGinOT.ttf) format("ttf"); 
 }
 *{
     margin: 0;
