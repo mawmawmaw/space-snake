@@ -10,14 +10,23 @@ class Snake {
         // Drawing the head of the snake.        
         ctx.font = emojiFont;
         ctx.textAlign='start';
-        ctx.fillStyle  = "greenyellow";
-        ctx.fillText('👾', this.x, this.y+tileSize);
+        if(!dead){
+            ctx.fillStyle  = "greenyellow";
+            ctx.fillText('👾', this.x, this.y+tileSize);
+        }else{
+            ctx.fillStyle  = "red";
+            ctx.fillText('💀', this.x, this.y+tileSize);
+        }
 
         // Drawing the tail of the snake.
         for (var i = 0; i < this.tail.length; i++) {
             ctx.font = emojiFont;
             ctx.textAlign='start';
-            ctx.fillStyle  = "greenyellow";
+            if(!dead){
+                ctx.fillStyle  = "greenyellow";
+            }else{
+                ctx.fillStyle  = "red";
+            }
             ctx.fillText('🟢', this.tail[i].x, this.tail[i].y+tileSize);
         }
     }

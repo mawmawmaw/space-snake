@@ -1,4 +1,4 @@
-let width,height,tileSize,canvas,ctx,isMobile,isPaused,food,snake,fps,level,emojiFont,pauseFont,score,scoreFont,scorePos,gameOverFont,dead=false,fpsInterval,startTime,now,then,elapsed,eat,die,animationFrame,barriers,barrierCount;
+let width,height,tileSize,canvas,ctx,isPaused,food,snake,fps,level,score,emojiFont,pauseFont,scoreFont,gameOverFont,dead=false,fpsInterval,startTime,now,then,elapsed,eat,die,shiny,animationFrame,barriers,barrierCount;
 // Adding an event listener for key presses.
 window.addEventListener("keydown", function (evt) {
     if (evt.key === " ") {
@@ -79,7 +79,7 @@ function showScore() {
     ctx.textAlign = "left";
     ctx.font = scoreFont;
     ctx.fillStyle = "white";
-    ctx.fillText("SCORE: " + score, 10, scorePos);
+    ctx.fillText("SCORE: " + score, 10, 50);
 }
 // Showing if the game is paused.
 function showPaused() {
@@ -91,12 +91,12 @@ function showPaused() {
 //Create Barriers
 function createBarrier(b_size,b_orientation){
     barriers.push({location: spawnLocation(),size:b_size,orientation:b_orientation,positions:new Array()});
-        if(barriers[barrierCount].orientation == "horizontal"){
+        if(barriers[barrierCount].orientation == 0){
             for (var i = 0; i < barriers[barrierCount].size; i++) {
                 barriers[barrierCount].positions.push(new Barrier({x:barriers[barrierCount].location.x+(tileSize*i),y:barriers[barrierCount].location.y}));
             }
         }
-        if(barriers[barriers.length-1].orientation == "vertical"){
+        if(barriers[barriers.length-1].orientation == 1){
             for (var i = 0; i < barriers[barrierCount].size; i++) {
                 barriers[barrierCount].positions.push(new Barrier({x:barriers[barrierCount].location.x,y:barriers[barrierCount].location.y+(tileSize*i)}));
             }
@@ -109,23 +109,17 @@ function init() {
     barrierCount = 0;
     eat = new Audio('./assets/audio/eat.mp3');
     die = new Audio('./assets/audio/die.mp3');
-    isPaused = false;
-    isMobile = window.matchMedia('(max-width: 768px)');
-    if (isMobile.matches){
-        tileSize = 20;
-        emojiFont = "20px Emojis";
-        pauseFont = "42px Ranchers";
-        scoreFont = "20px Ranchers";
-        scorePos = 25;
-        gameOverFont = "20px Ranchers";
-    }else{
-        tileSize = 40;
-        emojiFont = "40px Emojis";
-        pauseFont = "60px Ranchers";
-        scoreFont = "42px Ranchers";
-        scorePos = 50;
-        gameOverFont = "26px Ranchers";
+    shiny = new Audio('./assets/audio/shiny.mp3');
+    if(document.querySelector('#playMusic').checked){
+        shiny.volume = 0.2;
+        shiny.play();
     }
+    isPaused = false;
+    tileSize = 40;
+    emojiFont = "40px Emojis";
+    pauseFont = "60px Ranchers";
+    scoreFont = "42px Ranchers";
+    gameOverFont = "26px Ranchers";
     level = document.querySelector("select#level");
     levelModal = document.querySelector("select#level-modal");
     level = level.options[level.selectedIndex].value;
@@ -156,7 +150,7 @@ function init() {
     snake = new Snake({ x: tileSize * Math.floor(width / (2 * tileSize)), y: tileSize * Math.floor(height / (2 * tileSize)) });
     food = new Food(spawnLocation());
     barriers = new Array();
-    createBarrier(5,"horizontal");
+    createBarrier(5,0);
 }
 // The actual game function.
 function game() {
@@ -178,9 +172,13 @@ function update() {
         then = now - (elapsed % fpsInterval);
 
         if(isPaused){
+            shiny.pause();
             return;
+        }else{
+            shiny.play();
         }
         if (snake.die(barriers)) {
+            shiny.pause();
             die.play()
             dead = true;
             //Save last score
@@ -199,33 +197,15 @@ function update() {
         if (snake.eat()) {
             eat.play()
             score += food.foodArray[food.random].value;
-            if(score>=100){
+            if(score>=50){
                 fps += score/1000;
                 fpsInterval = 1000/fps;
             }
-            if(score>50&&barriers.length==1){
+            //Creates barriers every 50pts
+            if(Math.floor(score/50)==barriers.length){
                 let rockNumber = Math.floor(Math.random()*(8)) + 1;
-                createBarrier(rockNumber,"horizontal");
-            }
-            if(score>100&&barriers.length==2){
-                let rockNumber = Math.floor(Math.random()*(8)) + 1;
-                createBarrier(rockNumber,"vertical");
-            }
-            if(score>150&&barriers.length==3){
-                let rockNumber = Math.floor(Math.random()*(8)) + 1;
-                createBarrier(rockNumber,"horizontal");
-            }
-            if(score>200&&barriers.length==4){
-                let rockNumber = Math.floor(Math.random()*(8)) + 1;
-                createBarrier(rockNumber,"vertical");
-            }
-            if(score>250&&barriers.length==5){
-                let rockNumber = Math.floor(Math.random()*(8)) + 1;
-                createBarrier(rockNumber,"horizontal");
-            }
-            if(score>300&&barriers.length==5){
-                let rockNumber = Math.floor(Math.random()*(8)) + 1;
-                createBarrier(rockNumber,"vertical");
+                let rockDirection = Math.floor(Math.random()*(2));
+                createBarrier(rockNumber,rockDirection);
             }
             food.delete();
             food = new Food(spawnLocation());
